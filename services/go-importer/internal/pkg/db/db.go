@@ -76,9 +76,9 @@ func (db Database) ConfigureDatabase() {
 	db.InsertTag("flagid-out")
 	db.InsertTag("tcp")
 	db.InsertTag("udp")
-    db.InsertTag("SQLI")
-    db.InsertTag("PATH_TRAVERSAL")
-    db.InsertTag("CommandInjection")
+	db.InsertTag("SQLI")
+	db.InsertTag("PATH_TRAVERSAL")
+	db.InsertTag("CommandInjection")
 	db.ConfigureIndexes()
 }
 
