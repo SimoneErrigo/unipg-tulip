@@ -69,16 +69,12 @@ func ConnectMongo(uri string) Database {
 func (db Database) ConfigureDatabase() {
 	db.InsertTag("flag-in")
 	db.InsertTag("flag-out")
-	db.InsertTag("blocked")
-	db.InsertTag("suricata")
-	db.InsertTag("starred")
 	db.InsertTag("flagid-in")
 	db.InsertTag("flagid-out")
-	db.InsertTag("tcp")
-	db.InsertTag("udp")
 	db.InsertTag("SQLI")
 	db.InsertTag("PATH_TRAVERSAL")
 	db.InsertTag("CommandInjection")
+	db.InsertTag("XXE")
 	db.ConfigureIndexes()
 }
 
@@ -350,9 +346,22 @@ func (db Database) AddTagsToFlow(flow FlowID, tags []string, window int) bool {
 
 }
 func (db Database) InsertTag(tag string) {
-	tagCollection := db.client.Database("pcap").Collection("tags")
-	// Yeah this will err... A lot.... Two more dev days till Athens, this will do.
-	tagCollection.InsertOne(context.TODO(), bson.M{"_id": tag})
+    allowedTags := map[string]bool{
+        "flag-in":         true,
+        "flag-out":        true,
+        "flagid-in":       true,
+        "flagid-out":      true,
+        "SQLI":           true,
+        "PATH_TRAVERSAL": true,
+        "CommandInjection": true,
+        "XXE":            true,
+    }
+    
+    if allowedTags[tag] {
+        tagCollection := db.client.Database("pcap").Collection("tags")
+        tagCollection.InsertOne(context.TODO(), bson.M{"_id": tag})
+    }
+
 }
 
 type Flagid struct {

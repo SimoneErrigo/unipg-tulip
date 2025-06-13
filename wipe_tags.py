@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import re
-
 from bson import ObjectId
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
@@ -16,6 +15,6 @@ db = client.pcap
 pcap_coll = db.pcap
 
 pcap_coll.update_many(
-    { },
-    { "$pull": { "tags": { "$nin": [ "flag-in", "flag-out" ] }} }
+    {},
+    { "$pull": { "tags": { "$in": [ "tcp", "udp", "blocked", "suricata", "starred" ] } } }
 )
